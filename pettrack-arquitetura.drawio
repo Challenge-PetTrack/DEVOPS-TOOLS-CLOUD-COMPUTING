@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mxGraphModel dx="1422" dy="762" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1654" pageHeight="1169" math="0" shadow="0">
+  <root>
+    <mxCell id="0" />
+    <mxCell id="1" parent="0" />
+
+    <!-- ═══════════════════════════════════════════════════ -->
+    <!-- AZURE RESOURCE GROUP                                -->
+    <!-- ═══════════════════════════════════════════════════ -->
+    <mxCell id="2" value="&lt;b&gt;Azure Resource Group — rg-pettrack&lt;/b&gt;&lt;br&gt;&lt;font color='#666666'&gt;eastus2 · Standard D2s v3&lt;/font&gt;" 
+      style="points=[[0,0],[0.25,0],[0.5,0],[0.75,0],[1,0],[1,0.25],[1,0.5],[1,0.75],[1,1],[0.75,1],[0.5,1],[0.25,1],[0,1],[0,0.75],[0,0.5],[0,0.25]];shape=mxgraph.azure2.azure;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#1e72be;fontSize=13;fontStyle=1;verticalAlign=top;align=left;spacingLeft=60;spacingTop=10;" 
+      vertex="1" parent="1">
+      <mxGeometry x="80" y="40" width="1480" height="980" as="geometry" />
+    </mxCell>
+
+    <!-- ═══════════════════════════════════════════════════ -->
+    <!-- NSG                                                 -->
+    <!-- ═══════════════════════════════════════════════════ -->
+    <mxCell id="3" value="&lt;b&gt;NSG — nsg-pettrack&lt;/b&gt;&lt;br&gt;Portas: 22 (SSH) · 80 (HTTP)&lt;br&gt;8080 (App) · 1521 (Oracle)" 
+      style="shape=mxgraph.azure2.firewall;html=1;pointerEvents=1;dashed=0;fillColor=#ffe6cc;strokeColor=#d6b656;fontSize=11;align=center;verticalAlign=bottom;" 
+      vertex="1" parent="1">
+      <mxGeometry x="1360" y="60" width="70" height="80" as="geometry" />
+    </mxCell>
+
+    <!-- ═══════════════════════════════════════════════════ -->
+    <!-- VM UBUNTU                                           -->
+    <!-- ═══════════════════════════════════════════════════ -->
+    <mxCell id="4" value="&lt;b&gt;VM Ubuntu 22.04 — vm-pettrack&lt;/b&gt;&lt;br&gt;&lt;font color='#666666'&gt;Docker Engine instalado via Azure CLI&lt;/font&gt;" 
+      style="points=[[0,0],[0.25,0],[0.5,0],[0.75,0],[1,0],[1,0.25],[1,0.5],[1,0.75],[1,1],[0.75,1],[0.5,1],[0.25,1],[0,1],[0,0.75],[0,0.5],[0,0.25]];shape=mxgraph.azure2.virtual_machine;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;fontSize=12;fontStyle=1;verticalAlign=top;align=left;spacingLeft=60;spacingTop=8;" 
+      vertex="1" parent="1">
+      <mxGeometry x="200" y="180" width="1240" height="780" as="geometry" />
+    </mxCell>
+
+    <!-- ═══════════════════════════════════════════════════ -->
+    <!-- DOCKER NETWORK                                      -->
+    <!-- ═══════════════════════════════════════════════════ -->
+    <mxCell id="5" value="&lt;b&gt;Docker Network — petnet&lt;/b&gt;" 
+      style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1f5ee;strokeColor=#0F6E56;fontSize=12;fontStyle=1;verticalAlign=top;dashed=1;dashPattern=8 4;strokeWidth=2;" 
+      vertex="1" parent="1">
+      <mxGeometry x="340" y="300" width="960" height="600" as="geometry" />
+    </mxCell>
+
+    <!-- ═══════════════════════════════════════════════════ -->
+    <!-- CONTAINER APP JAVA                                  -->
+    <!-- ═══════════════════════════════════════════════════ -->
+    <mxCell id="6" value="&lt;b style='font-size:14px'&gt;🐳 Container — pettrack-app&lt;/b&gt;" 
+      style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#7B68EE;fontSize=12;fontStyle=1;verticalAlign=top;align=center;" 
+      vertex="1" parent="1">
+      <mxGeometry x="360" y="330" width="380" height="34" as="geometry" />
+    </mxCell>
+
+    <mxCell id="7" value="&lt;b&gt;Java 21 + Spring Boot 3&lt;/b&gt;&lt;br&gt;FROM maven:3.9.6-eclipse-temurin-21&lt;br&gt;&lt;br&gt;✅ USER appuser (sem root)&lt;br&gt;✅ Porta 8080 exposta&lt;br&gt;&lt;br&gt;Endpoints:&lt;br&gt;/pet · /tutor · /clinica · /medicamento&lt;br&gt;/evento · /alerta · /notificacao&lt;br&gt;/protocolo · /collar · /bcs · /score · /adesao&lt;br&gt;&lt;br&gt;Swagger UI → /swagger" 
+      style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f3e8ff;strokeColor=#7B68EE;fontSize=11;verticalAlign=top;align=left;spacingLeft=12;spacingTop=8;" 
+      vertex="1" parent="1">
+      <mxGeometry x="360" y="364" width="380" height="210" as="geometry" />
+    </mxCell>
+
+    <!-- ═══════════════════════════════════════════════════ -->
+    <!-- CONTAINER ORACLE                                    -->
+    <!-- ═══════════════════════════════════════════════════ -->
+    <mxCell id="8" value="&lt;b style='font-size:14px'&gt;🐳 Container — pettrack-oracle&lt;/b&gt;" 
+      style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fce4d6;strokeColor=#d05538;fontSize=12;fontStyle=1;verticalAlign=top;align=center;" 
+      vertex="1" parent="1">
+      <mxGeometry x="840" y="330" width="380" height="34" as="geometry" />
+    </mxCell>
+
+    <mxCell id="9" value="&lt;b&gt;Oracle XE 21&lt;/b&gt;&lt;br&gt;FROM gvenzl/oracle-xe:21-slim&lt;br&gt;&lt;br&gt;✅ Porta 1521 exposta&lt;br&gt;✅ Script init: pettrack.sql&lt;br&gt;&lt;br&gt;ENV ORACLE_PASSWORD&lt;br&gt;ENV APP_USER&lt;br&gt;ENV APP_USER_PASSWORD&lt;br&gt;&lt;br&gt;Banco: XEPDB1&lt;br&gt;Usuário: rm563719" 
+      style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff3ee;strokeColor=#d05538;fontSize=11;verticalAlign=top;align=left;spacingLeft=12;spacingTop=8;" 
+      vertex="1" parent="1">
+      <mxGeometry x="840" y="364" width="380" height="210" as="geometry" />
+    </mxCell>
+
+    <!-- ═══════════════════════════════════════════════════ -->
+    <!-- VOLUME NOMEADO                                      -->
+    <!-- ═══════════════════════════════════════════════════ -->
+    <mxCell id="10" value="&lt;b&gt;💾 Volume Nomeado&lt;/b&gt;&lt;br&gt;oracle-data&lt;br&gt;&lt;font color='#555'&gt;/opt/oracle/oradata&lt;/font&gt;" 
+      style="shape=mxgraph.azure2.storage;html=1;pointerEvents=1;dashed=0;fillColor=#d5e8d4;strokeColor=#3B6D11;fontSize=11;align=center;verticalAlign=bottom;" 
+      vertex="1" parent="1">
+      <mxGeometry x="890" y="640" width="80" height="80" as="geometry" />
+    </mxCell>
+
+    <!-- ═══════════════════════════════════════════════════ -->
+    <!-- GITHUB                                              -->
+    <!-- ═══════════════════════════════════════════════════ -->
+    <mxCell id="11" value="&lt;b&gt;GitHub&lt;/b&gt;&lt;br&gt;Dockerfile (App + DB)&lt;br&gt;challenge-scripts.sh&lt;br&gt;README.md&lt;br&gt;.env.example" 
+      style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;fontSize=11;verticalAlign=top;align=center;" 
+      vertex="1" parent="1">
+      <mxGeometry x="460" y="640" width="200" height="110" as="geometry" />
+    </mxCell>
+
+    <!-- ═══════════════════════════════════════════════════ -->
+    <!-- USUÁRIO EXTERNO                                     -->
+    <!-- ═══════════════════════════════════════════════════ -->
+    <mxCell id="12" value="&lt;b&gt;👤 Usuário&lt;/b&gt;&lt;br&gt;Postman / Browser&lt;br&gt;http://IP:8080" 
+      style="shape=mxgraph.azure2.user;html=1;pointerEvents=1;dashed=0;fillColor=#dae8fc;strokeColor=#1e72be;fontSize=11;align=center;verticalAlign=bottom;" 
+      vertex="1" parent="1">
+      <mxGeometry x="100" y="400" width="70" height="80" as="geometry" />
+    </mxCell>
+
+    <!-- ═══════════════════════════════════════════════════ -->
+    <!-- AZURE CLI                                           -->
+    <!-- ═══════════════════════════════════════════════════ -->
+    <mxCell id="13" value="&lt;b&gt;⚙️ Azure CLI&lt;/b&gt;&lt;br&gt;challenge-scripts.sh&lt;br&gt;Provisiona VM + NSG&lt;br&gt;Instala Docker + Git" 
+      style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d6b656;fontSize=11;verticalAlign=top;align=center;" 
+      vertex="1" parent="1">
+      <mxGeometry x="100" y="600" width="160" height="100" as="geometry" />
+    </mxCell>
+
+    <!-- ═══════════════════════════════════════════════════ -->
+    <!-- SETAS / CONEXÕES                                    -->
+    <!-- ═══════════════════════════════════════════════════ -->
+
+    <!-- Usuário → App (HTTP 8080) -->
+    <mxCell id="20" value="HTTP :8080" 
+      style="edgeStyle=orthogonalEdgeStyle;html=1;fontSize=11;fontStyle=1;strokeColor=#1e72be;strokeWidth=2;" 
+      edge="1" source="12" target="6" parent="1">
+      <mxGeometry relative="1" as="geometry" />
+    </mxCell>
+
+    <!-- App → Oracle (JDBC 1521) -->
+    <mxCell id="21" value="JDBC :1521" 
+      style="edgeStyle=orthogonalEdgeStyle;html=1;fontSize=11;fontStyle=1;strokeColor=#7B68EE;strokeWidth=2;" 
+      edge="1" source="7" target="9" parent="1">
+      <mxGeometry relative="1" as="geometry" />
+    </mxCell>
+
+    <!-- Oracle → Volume (persistência) -->
+    <mxCell id="22" value="persiste dados" 
+      style="edgeStyle=orthogonalEdgeStyle;html=1;fontSize=11;fontStyle=1;strokeColor=#3B6D11;strokeWidth=2;" 
+      edge="1" source="9" target="10" parent="1">
+      <mxGeometry relative="1" as="geometry" />
+    </mxCell>
+
+    <!-- Azure CLI → VM (provisiona) -->
+    <mxCell id="23" value="provisiona" 
+      style="edgeStyle=orthogonalEdgeStyle;html=1;fontSize=11;fontStyle=1;strokeColor=#d6b656;strokeWidth=2;dashed=1;" 
+      edge="1" source="13" target="4" parent="1">
+      <mxGeometry relative="1" as="geometry" />
+    </mxCell>
+
+    <!-- GitHub → VM (git clone) -->
+    <mxCell id="24" value="git clone" 
+      style="edgeStyle=orthogonalEdgeStyle;html=1;fontSize=11;fontStyle=1;strokeColor=#666666;strokeWidth=1;dashed=1;" 
+      edge="1" source="11" target="6" parent="1">
+      <mxGeometry relative="1" as="geometry" />
+    </mxCell>
+
+    <!-- NSG protege VM -->
+    <mxCell id="25" value="protege" 
+      style="edgeStyle=orthogonalEdgeStyle;html=1;fontSize=11;fontStyle=1;strokeColor=#d6b656;strokeWidth=1;dashed=1;" 
+      edge="1" source="3" target="4" parent="1">
+      <mxGeometry relative="1" as="geometry" />
+    </mxCell>
+
+  </root>
+</mxGraphModel>
