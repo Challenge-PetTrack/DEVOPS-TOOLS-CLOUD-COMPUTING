@@ -5,7 +5,7 @@
 GRUPO=pettrack
 LOCATION=eastus2
 USER=azureuser
-PASSWORD='Moises12@'
+PASSWORD='Jrmolinillo12@'
 
 RG=rg-$GRUPO
 VNET=vnet-$GRUPO
