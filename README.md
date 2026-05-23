@@ -554,7 +554,7 @@ EOF
 
 ## 📎 Links
 
-- **Vídeo YouTube:** *https://youtu.be/WMwEoHx7LzA*
-- **Repositório App:** *https://github.com/Challenge-PetTrack/JAVA-ADVANCED.git*
-- **Repositório DB:** *https://github.com/Challenge-PetTrack/MASTERING-RELATIONAL-NON-RELATIONAL-DATABASE.git*
-- **Repositório DevOps:** *https://github.com/Challenge-PetTrack/DEVOPS-TOOLS-CLOUD-COMPUTING.git*
+- **Vídeo YouTube:** *https://youtu.be/WMwEoHx7LzA **
+- **Repositório App:** *https://github.com/Challenge-PetTrack/JAVA-ADVANCED.git **
+- **Repositório DB:** *https://github.com/Challenge-PetTrack/MASTERING-RELATIONAL-NON-RELATIONAL-DATABASE.git **
+- **Repositório DevOps:** *https://github.com/Challenge-PetTrack/DEVOPS-TOOLS-CLOUD-COMPUTING.git **
