@@ -1,0 +1,5 @@
+{
+  "operacao": "DELETE",
+  "recurso": "/pet/remover/{id}",
+  "descricao": "Exclusão do Pet cadastrado nos testes e validação da deleção no banco via SELECT"
+}

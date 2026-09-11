@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Login')}"></head>
+<body class="bg-light d-flex align-items-center min-vh-100 py-5">
+
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-6 col-lg-5">
+                
+                <!-- Logo & Título -->
+                <div class="text-center mb-4">
+                    <div class="d-inline-flex p-3 rounded-circle bg-primary bg-opacity-10 text-primary mb-2">
+                        <i class="bi bi-heart-pulse-fill fs-1"></i>
+                    </div>
+                    <h2 class="fw-bold text-dark mb-1">PetTrack</h2>
+                    <p class="text-muted">Acesse a plataforma de saúde animal</p>
+                </div>
+
+                <!-- Card de Login -->
+                <div class="card card-custom p-4 shadow-sm border-0">
+                    <div class="card-body">
+                        
+                        <!-- Mensagens de Erro / Sucesso -->
+                        <div th:if="${mensagemErro}" class="alert alert-danger alert-dismissible fade show d-flex align-items-center" role="alert">
+                            <i class="bi bi-exclamation-circle-fill me-2 fs-5"></i>
+                            <div th:text="${mensagemErro}"></div>
+                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                        </div>
+                        <div th:if="${mensagemSucesso}" class="alert alert-success alert-dismissible fade show d-flex align-items-center" role="alert">
+                            <i class="bi bi-check-circle-fill me-2 fs-5"></i>
+                            <div th:text="${mensagemSucesso}"></div>
+                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                        </div>
+
+                        <!-- Formulário de Login -->
+                        <form th:action="@{/login}" method="post">
+                            <div class="mb-3">
+                                <label for="email" class="form-label fw-semibold">E-mail</label>
+                                <div class="input-group">
+                                    <span class="input-group-text bg-light"><i class="bi bi-envelope"></i></span>
+                                    <input type="email" class="form-control" id="email" name="email" placeholder="seu.email@exemplo.com" required autofocus>
+                                </div>
+                            </div>
+
+                            <div class="mb-4">
+                                <label for="senha" class="form-label fw-semibold">Senha</label>
+                                <div class="input-group">
+                                    <span class="input-group-text bg-light"><i class="bi bi-lock"></i></span>
+                                    <input type="password" class="form-control" id="senha" name="senha" placeholder="••••••••" required>
+                                </div>
+                            </div>
+
+                            <button type="submit" class="btn btn-primary w-100 py-2 fw-semibold shadow-sm">
+                                <i class="bi bi-box-arrow-in-right me-1"></i> Entrar
+                            </button>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- Credenciais Rápidas de Demonstração (Facilita a Avaliação) -->
+                <div class="card card-custom mt-4 p-3 bg-white border-0 shadow-sm">
+                    <h6 class="fw-bold text-dark mb-2"><i class="bi bi-key-fill text-warning me-1"></i> Credenciais para Teste e Avaliação:</h6>
+                    <div class="small text-muted mb-1">
+                        <strong>Administrador / Vet:</strong> <code>admin@pettrack.com</code> / <code>admin123</code>
+                    </div>
+                    <div class="small text-muted">
+                        <strong>Tutor:</strong> <code>ana.silva@icloud.com</code> / <code>tutor123</code>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <script th:replace="~{fragments/layout :: scripts}"></script>
+</body>
+</html>

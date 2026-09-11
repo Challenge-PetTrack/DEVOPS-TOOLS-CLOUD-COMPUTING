@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="~{fragments/layout :: head('Acompanhamento Medicamentoso')}"></head>
+<body>
+
+    <nav th:replace="~{fragments/layout :: navbar}"></nav>
+    <div th:replace="~{fragments/layout :: alertas}"></div>
+
+    <main class="container my-4 main-content">
+        <div class="row justify-content-center">
+            <div class="col-lg-10">
+
+                <!-- Cabeçalho -->
+                <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-2">
+                    <div>
+                        <span class="badge bg-success mb-1 fw-bold">FLUXO DE NEGÓCIO 2</span>
+                        <h2 class="fw-bold text-dark mb-1">Acompanhamento e Adesão Medicamentosa</h2>
+                        <p class="text-muted mb-0">Confirme as doses administradas e mantenha o tratamento do seu pet em dia.</p>
+                    </div>
+                    <a th:href="@{/portal-tutor/dashboard}" class="btn btn-outline-secondary">
+                        <i class="bi bi-arrow-left me-1"></i> Voltar aos Pets
+                    </a>
+                </div>
+
+                <div class="row g-4">
+                    <!-- Formulário de Confirmação de Dose -->
+                    <div class="col-lg-6">
+                        <div class="card card-custom p-4 shadow-sm h-100">
+                            <h5 class="fw-bold text-dark mb-3">
+                                <i class="bi bi-check-circle-fill text-success me-2"></i> Registrar Dose Diária
+                            </h5>
+
+                            <form th:action="@{/portal-tutor/medicamentos/registrar-dose}" th:object="${adesaoInput}" method="post">
+                                <div class="mb-3">
+                                    <label for="idMedicamento" class="form-label fw-semibold">Medicamento Prescrito <span class="text-danger">*</span></label>
+                                    <select class="form-select" id="idMedicamento" th:field="*{idMedicamento}" required>
+                                        <option value="">Selecione o medicamento...</option>
+                                        <option th:each="m : ${medicamentos}" th:value="${m.id}" 
+                                                th:text="${m.nome} + ' (' + ${m.dosagem} + ' - ' + ${m.frequencia} + ')'"></option>
+                                    </select>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="dataDose" class="form-label fw-semibold">Data da Administração</label>
+                                    <input type="date" class="form-control" id="dataDose" th:field="*{dataDose}">
+                                </div>
+
+                                <div class="mb-3">
+                                    <label class="form-label fw-semibold d-block">O pet tomou o remédio? <span class="text-danger">*</span></label>
+                                    <div class="btn-group w-100" role="group">
+                                        <input type="radio" class="btn-check" name="tomou" id="tomouSim" value="S" checked th:field="*{tomou}">
+                                        <label class="btn btn-outline-success py-2 fw-semibold" for="tomouSim">
+                                            <i class="bi bi-check-lg me-1"></i> Sim, Administrado
+                                        </label>
+
+                                        <input type="radio" class="btn-check" name="tomou" id="tomouNao" value="N" th:field="*{tomou}">
+                                        <label class="btn btn-outline-danger py-2 fw-semibold" for="tomouNao">
+                                            <i class="bi bi-x-lg me-1"></i> Não / Esquecido
+                                        </label>
+                                    </div>
+                                </div>
+
+                                <div class="mb-4">
+                                    <label for="observacao" class="form-label fw-semibold">Observações / Reações</label>
+                                    <textarea class="form-control" id="observacao" th:field="*{observacao}" rows="3" placeholder="Ex: Tutor esqueceu, pet cuspiu o comprimido, etc."></textarea>
+                                </div>
+
+                                <button type="submit" class="btn btn-success w-100 py-2 fw-bold shadow-sm">
+                                    <i class="bi bi-send-check me-1"></i> Confirmar Registro
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+
+                    <!-- Lista de Medicamentos Prescritos -->
+                    <div class="col-lg-6">
+                        <div class="card card-custom p-4 shadow-sm h-100">
+                            <h5 class="fw-bold text-dark mb-3">
+                                <i class="bi bi-prescription2 text-primary me-2"></i> Prescrições em Andamento
+                            </h5>
+
+                            <div class="list-group list-group-flush">
+                                <div class="list-group-item px-0 py-3 border-bottom" th:each="med : ${medicamentos}">
+                                    <div class="d-flex justify-content-between align-items-start mb-1">
+                                        <div>
+                                            <h6 class="fw-bold text-dark mb-0" th:text="${med.nome}"></h6>
+                                            <small class="text-primary fw-semibold" th:text="'Paciente: ' + ${med.evento.pet.nome}"></small>
+                                        </div>
+                                        <span class="badge bg-primary bg-opacity-10 text-primary" th:text="${med.dosagem}"></span>
+                                    </div>
+                                    <div class="small text-muted mb-1">
+                                        <i class="bi bi-clock-history me-1"></i> Frequência: <span class="fw-semibold text-dark" th:text="${med.frequencia}"></span>
+                                    </div>
+                                    <div class="small text-muted">
+                                        <i class="bi bi-calendar3 me-1"></i> Início: <span th:text="${med.dataInicio}"></span> | Fim: <span th:text="${med.dataFim != null ? med.dataFim : 'Contínuo'}"></span>
+                                    </div>
+                                </div>
+
+                                <div class="text-center py-4 text-muted" th:if="${#lists.isEmpty(medicamentos)}">
+                                    Nenhum medicamento ativo no momento.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Histórico de Doses Registradas -->
+                <div class="card card-custom mt-4 p-4 shadow-sm">
+                    <h5 class="fw-bold text-dark mb-3">
+                        <i class="bi bi-clock-history text-secondary me-2"></i> Histórico Recente de Doses
+                    </h5>
+
+                    <div class="table-responsive">
+                        <table class="table table-hover align-middle mb-0">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>Data</th>
+                                    <th>Medicamento</th>
+                                    <th>Status</th>
+                                    <th>Observações</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr th:each="h : ${historicoAdesao}">
+                                    <td class="fw-semibold" th:text="${h.dataDose}"></td>
+                                    <td th:text="${h.medicamento.nome}"></td>
+                                    <td>
+                                        <span th:if="${h.status.name() == 'S'}" class="badge bg-success"><i class="bi bi-check-circle me-1"></i> Administrado</span>
+                                        <span th:if="${h.status.name() == 'N'}" class="badge bg-danger"><i class="bi bi-x-circle me-1"></i> Não Tomou</span>
+                                    </td>
+                                    <td class="small text-muted" th:text="${h.observacao != null ? h.observacao : '-'}"></td>
+                                </tr>
+                                <tr th:if="${#lists.isEmpty(historicoAdesao)}">
+                                    <td colspan="4" class="text-center py-3 text-muted">Nenhum registro de dose encontrado.</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </main>
+
+    <footer th:replace="~{fragments/layout :: footer}"></footer>
+    <script th:replace="~{fragments/layout :: scripts}"></script>
+</body>
+</html>

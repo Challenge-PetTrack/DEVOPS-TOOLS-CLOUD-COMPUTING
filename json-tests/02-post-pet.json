@@ -1,0 +1,11 @@
+{
+  "nome": "Zeus",
+  "especie": "Canino",
+  "raca": "Pastor Alemão",
+  "dataNascimento": "2022-08-10",
+  "pesoKg": 36.4,
+  "sexo": "Macho",
+  "collarCode": "CLYVO-COLLAR-777",
+  "idTutor": 1,
+  "idClinica": 1
+}

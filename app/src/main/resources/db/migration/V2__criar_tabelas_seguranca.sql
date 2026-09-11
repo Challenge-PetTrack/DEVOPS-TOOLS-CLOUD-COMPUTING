@@ -1,0 +1,40 @@
+-- =============================================================================
+-- V2: TABELAS DE AUTENTICAÇÃO E CONTROLE DE ACESSO (Spring Security)
+-- =============================================================================
+
+DECLARE
+    v_count NUMBER;
+BEGIN
+    SELECT COUNT(*) INTO v_count FROM user_sequences WHERE sequence_name = 'SEQ_USUARIO';
+    IF v_count = 0 THEN
+        EXECUTE IMMEDIATE 'CREATE SEQUENCE SEQ_USUARIO START WITH 1 INCREMENT BY 1 NOCACHE NOCYCLE';
+    END IF;
+END;
+/
+
+DECLARE
+    v_count NUMBER;
+BEGIN
+    SELECT COUNT(*) INTO v_count FROM user_tables WHERE table_name = 'TB_USUARIO';
+    IF v_count > 0 THEN
+        EXECUTE IMMEDIATE 'DROP TABLE TB_USUARIO CASCADE CONSTRAINTS';
+    END IF;
+
+    EXECUTE IMMEDIATE 'CREATE TABLE TB_USUARIO (
+        ID_USUARIO NUMBER        NOT NULL,
+        NM_NOME    VARCHAR2(150) NOT NULL,
+        DS_EMAIL   VARCHAR2(200) NOT NULL,
+        DS_SENHA   VARCHAR2(255) NOT NULL,
+        DS_ROLE    VARCHAR2(50)  NOT NULL,
+        ST_ATIVO   CHAR(1)       DEFAULT ''S'' NOT NULL,
+        ID_TUTOR   NUMBER,
+        ID_CLINICA NUMBER,
+        CONSTRAINT TB_USUARIO_PK       PRIMARY KEY (ID_USUARIO),
+        CONSTRAINT TB_USUARIO_EMAIL_UN UNIQUE (DS_EMAIL),
+        CONSTRAINT CK_USUARIO_ROLE     CHECK (DS_ROLE IN (''ROLE_ADMIN'', ''ROLE_VET'', ''ROLE_TUTOR'')),
+        CONSTRAINT CK_USUARIO_ATIVO    CHECK (ST_ATIVO IN (''N'', ''S'')),
+        CONSTRAINT FK_USUARIO_TUTOR    FOREIGN KEY (ID_TUTOR) REFERENCES TB_TUTOR (ID_TUTOR),
+        CONSTRAINT FK_USUARIO_CLINICA  FOREIGN KEY (ID_CLINICA) REFERENCES TB_CLINICA (ID_CLINICA)
+    )';
+END;
+/

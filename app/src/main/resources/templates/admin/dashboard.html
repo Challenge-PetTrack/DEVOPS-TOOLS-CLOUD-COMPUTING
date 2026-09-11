@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="~{fragments/layout :: head('Dashboard do Administrador')}"></head>
+<body>
+
+    <nav th:replace="~{fragments/layout :: navbar}"></nav>
+    <div th:replace="~{fragments/layout :: alertas}"></div>
+
+    <main class="container my-4 main-content">
+        <!-- Título e Ações Rápidas -->
+        <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-2">
+            <div>
+                <h2 class="fw-bold text-dark mb-1">Painel Veterinário & Clínico</h2>
+                <p class="text-muted mb-0">Visão integrada de telemetria, pacientes e alertas clínicos em tempo real.</p>
+            </div>
+            <div class="d-flex gap-2">
+                <a th:href="@{/admin/telemetria}" class="btn btn-warning text-dark fw-semibold shadow-sm">
+                    <i class="bi bi-broadcast me-1"></i> Simulador Telemetria IoT
+                </a>
+                <a th:href="@{/admin/pets/novo}" class="btn btn-primary fw-semibold shadow-sm">
+                    <i class="bi bi-plus-circle me-1"></i> Novo Paciente (Pet)
+                </a>
+            </div>
+        </div>
+
+        <!-- Indicadores / Cards de Estatísticas -->
+        <div class="row g-3 mb-4">
+            <div class="col-sm-6 col-lg-3">
+                <div class="card card-stat p-3 bg-white border-start border-primary border-4">
+                    <div class="d-flex align-items-center justify-content-between">
+                        <div>
+                            <span class="text-muted small fw-semibold">TOTAL DE PETS</span>
+                            <h3 class="fw-bold text-dark mb-0 mt-1" th:text="${totalPets}">0</h3>
+                        </div>
+                        <div class="p-3 bg-primary bg-opacity-10 text-primary rounded-circle">
+                            <i class="bi bi-heart-pulse fs-3"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-sm-6 col-lg-3">
+                <div class="card card-stat p-3 bg-white border-start border-success border-4">
+                    <div class="d-flex align-items-center justify-content-between">
+                        <div>
+                            <span class="text-muted small fw-semibold">TUTORES CADASTRADOS</span>
+                            <h3 class="fw-bold text-dark mb-0 mt-1" th:text="${totalTutores}">0</h3>
+                        </div>
+                        <div class="p-3 bg-success bg-opacity-10 text-success rounded-circle">
+                            <i class="bi bi-people fs-3"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-sm-6 col-lg-3">
+                <div class="card card-stat p-3 bg-white border-start border-info border-4">
+                    <div class="d-flex align-items-center justify-content-between">
+                        <div>
+                            <span class="text-muted small fw-semibold">CLÍNICAS PARCEIRAS</span>
+                            <h3 class="fw-bold text-dark mb-0 mt-1" th:text="${totalClinicas}">0</h3>
+                        </div>
+                        <div class="p-3 bg-info bg-opacity-10 text-info rounded-circle">
+                            <i class="bi bi-hospital fs-3"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-sm-6 col-lg-3">
+                <div class="card card-stat p-3 bg-white border-start border-danger border-4">
+                    <div class="d-flex align-items-center justify-content-between">
+                        <div>
+                            <span class="text-muted small fw-semibold">ALERTAS PENDENTES</span>
+                            <h3 class="fw-bold text-danger mb-0 mt-1" th:text="${#lists.size(alertasPendentes)}">0</h3>
+                        </div>
+                        <div class="p-3 bg-danger bg-opacity-10 text-danger rounded-circle">
+                            <i class="bi bi-exclamation-triangle fs-3"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Linha de Conteúdo Principal -->
+        <div class="row g-4">
+            <!-- Tabela de Alertas Pendentes -->
+            <div class="col-lg-6">
+                <div class="card card-custom h-100">
+                    <div class="card-header card-header-custom d-flex justify-content-between align-items-center">
+                        <span class="text-danger"><i class="bi bi-bell-fill me-2"></i> Alertas Clínicos Ativos</span>
+                        <span class="badge bg-danger rounded-pill" th:text="${#lists.size(alertasPendentes)} + ' ativos'"></span>
+                    </div>
+                    <div class="card-body p-0">
+                        <div class="table-responsive">
+                            <table class="table table-hover align-middle mb-0">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th>Tipo</th>
+                                        <th>Pet</th>
+                                        <th>Descrição</th>
+                                        <th>Ref</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr th:each="alerta : ${alertasPendentes}">
+                                        <td>
+                                            <span th:if="${alerta.tipoAlerta.name() == 'FEBRE'}" class="badge badge-febre">Febre</span>
+                                            <span th:if="${alerta.tipoAlerta.name() == 'SEDENTARISMO'}" class="badge badge-sedentarismo">Sedentarismo</span>
+                                            <span th:if="${alerta.tipoAlerta.name() == 'ADESAO'}" class="badge badge-adesao">Adesão</span>
+                                            <span th:if="${alerta.tipoAlerta.name() != 'FEBRE' and alerta.tipoAlerta.name() != 'SEDENTARISMO' and alerta.tipoAlerta.name() != 'ADESAO'}" class="badge bg-secondary" th:text="${alerta.tipoAlerta.name()}"></span>
+                                        </td>
+                                        <td class="fw-semibold" th:text="${alerta.pet.nome}"></td>
+                                        <td class="small text-muted" th:text="${alerta.descricao}"></td>
+                                        <td class="small fw-bold" th:text="${alerta.valorRef != null ? alerta.valorRef : '-'}"></td>
+                                    </tr>
+                                    <tr th:if="${#lists.isEmpty(alertasPendentes)}">
+                                        <td colspan="4" class="text-center py-4 text-muted">
+                                            <i class="bi bi-check-circle fs-3 text-success d-block mb-1"></i>
+                                            Nenhum alerta pendente no momento.
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tabela de Pacientes (Pets) -->
+            <div class="col-lg-6">
+                <div class="card card-custom h-100">
+                    <div class="card-header card-header-custom d-flex justify-content-between align-items-center">
+                        <span class="text-dark"><i class="bi bi-heart-pulse-fill me-2 text-primary"></i> Pacientes Recentes</span>
+                        <a th:href="@{/admin/pets}" class="btn btn-sm btn-outline-primary">Ver Todos</a>
+                    </div>
+                    <div class="card-body p-0">
+                        <div class="table-responsive">
+                            <table class="table table-hover align-middle mb-0">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th>Nome</th>
+                                        <th>Espécie / Raça</th>
+                                        <th>Tutor</th>
+                                        <th class="text-end">Ações</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr th:each="p : ${pets}">
+                                        <td>
+                                            <div class="fw-semibold" th:text="${p.nome}"></div>
+                                            <small class="text-muted" th:text="${p.sexo.name() == 'M' ? 'Macho' : 'Fêmea'}"></small>
+                                        </td>
+                                        <td>
+                                            <span th:text="${p.especie}"></span> - <small class="text-muted" th:text="${p.raca}"></small>
+                                        </td>
+                                        <td th:text="${p.tutor.nome}"></td>
+                                        <td class="text-end">
+                                            <a th:href="@{/admin/pets/editar/{id}(id=${p.id})}" class="btn btn-sm btn-outline-secondary me-1" title="Editar">
+                                                <i class="bi bi-pencil"></i>
+                                            </a>
+                                            <a th:href="@{/admin/pets/excluir/{id}(id=${p.id})}" class="btn btn-sm btn-outline-danger" title="Excluir" onclick="return confirm('Deseja realmente remover este paciente?')">
+                                                <i class="bi bi-trash"></i>
+                                            </a>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer th:replace="~{fragments/layout :: footer}"></footer>
+    <script th:replace="~{fragments/layout :: scripts}"></script>
+</body>
+</html>

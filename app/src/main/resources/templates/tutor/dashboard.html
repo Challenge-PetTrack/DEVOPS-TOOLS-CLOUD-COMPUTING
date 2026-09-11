@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="~{fragments/layout :: head('Portal do Tutor')}"></head>
+<body>
+
+    <nav th:replace="~{fragments/layout :: navbar}"></nav>
+    <div th:replace="~{fragments/layout :: alertas}"></div>
+
+    <main class="container my-4 main-content">
+        <!-- Boas-vindas -->
+        <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-2">
+            <div>
+                <h2 class="fw-bold text-dark mb-1">Olá, <span th:text="${usuario != null ? usuario.nome : 'Tutor(a)'}"></span>! 🐾</h2>
+                <p class="text-muted mb-0">Acompanhe a saúde, vacinas e medicações dos seus pets em tempo real.</p>
+            </div>
+            <a th:href="@{/portal-tutor/medicamentos}" class="btn btn-success fw-semibold shadow-sm">
+                <i class="bi bi-capsule me-1"></i> Confirmar Doses de Hoje
+            </a>
+        </div>
+
+        <!-- Meus Pets (Grid de Cards) -->
+        <h4 class="fw-bold text-dark mb-3"><i class="bi bi-heart-pulse-fill text-danger me-2"></i> Meus Pets</h4>
+        <div class="row g-4 mb-5">
+            <div class="col-md-6 col-lg-4" th:each="p : ${pets}">
+                <div class="card card-custom h-100 p-3 shadow-sm border-0">
+                    <div class="d-flex align-items-center gap-3 mb-3">
+                        <div class="p-3 rounded-circle bg-primary bg-opacity-10 text-primary fs-3">
+                            <i class="bi bi-heart-pulse"></i>
+                        </div>
+                        <div>
+                            <h5 class="fw-bold text-dark mb-0" th:text="${p.nome}"></h5>
+                            <small class="text-muted" th:text="${p.especie} + ' • ' + ${p.raca}"></small>
+                        </div>
+                    </div>
+
+                    <div class="bg-light p-3 rounded-3 mb-3">
+                        <div class="d-flex justify-content-between mb-1">
+                            <span class="text-muted small">Idade:</span>
+                            <span class="fw-semibold small" th:text="${p.idade} + ' anos'"></span>
+                        </div>
+                        <div class="d-flex justify-content-between mb-1">
+                            <span class="text-muted small">Peso:</span>
+                            <span class="fw-semibold small" th:text="${p.peso} + ' kg'"></span>
+                        </div>
+                        <div class="d-flex justify-content-between">
+                            <span class="text-muted small">Clínica:</span>
+                            <span class="fw-semibold small" th:text="${p.clinica != null ? p.clinica.nome : 'N/A'}"></span>
+                        </div>
+                    </div>
+
+                    <div class="mt-auto d-flex gap-2">
+                        <a th:href="@{/portal-tutor/pet/{id}(id=${p.id})}" class="btn btn-outline-primary w-100 btn-sm fw-semibold">
+                            <i class="bi bi-journal-medical me-1"></i> Ver Carteirinha
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-12" th:if="${#lists.isEmpty(pets)}">
+                <div class="card card-custom p-5 text-center text-muted">
+                    <i class="bi bi-emoji-neutral fs-1 d-block mb-2"></i>
+                    <h5>Nenhum pet vinculado ao seu perfil no momento.</h5>
+                </div>
+            </div>
+        </div>
+
+        <!-- Notificações e Lembretes -->
+        <h4 class="fw-bold text-dark mb-3"><i class="bi bi-bell-fill text-warning me-2"></i> Notificações Recentes</h4>
+        <div class="card card-custom">
+            <div class="card-body p-0">
+                <ul class="list-group list-group-flush rounded-3">
+                    <li class="list-group-item p-3" th:each="n : ${notificacoes}">
+                        <div class="d-flex align-items-center justify-content-between">
+                            <div class="d-flex align-items-center gap-3">
+                                <span th:if="${n.tipo.name() == 'URGENTE'}" class="badge bg-danger p-2"><i class="bi bi-exclamation-triangle"></i></span>
+                                <span th:if="${n.tipo.name() == 'ALERTA'}" class="badge bg-warning text-dark p-2"><i class="bi bi-bell"></i></span>
+                                <span th:if="${n.tipo.name() == 'LEMBRETE'}" class="badge bg-info p-2"><i class="bi bi-calendar-check"></i></span>
+                                <span th:if="${n.tipo.name() == 'INFO'}" class="badge bg-secondary p-2"><i class="bi bi-info-circle"></i></span>
+
+                                <div>
+                                    <h6 class="mb-0 fw-bold" th:text="${n.titulo}"></h6>
+                                    <small class="text-muted" th:text="${n.mensagem}"></small>
+                                </div>
+                            </div>
+                            <span class="badge bg-light text-dark border" th:text="${n.status.name() == 'S' ? 'Lida' : 'Nova'}"></span>
+                        </div>
+                    </li>
+                    <li class="list-group-item p-4 text-center text-muted" th:if="${#lists.isEmpty(notificacoes)}">
+                        Nenhuma notificação no momento.
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </main>
+
+    <footer th:replace="~{fragments/layout :: footer}"></footer>
+    <script th:replace="~{fragments/layout :: scripts}"></script>
+</body>
+</html>

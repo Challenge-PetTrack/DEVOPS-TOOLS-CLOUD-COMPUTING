@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="~{fragments/layout :: head('Gestão de Pets')}"></head>
+<body>
+
+    <nav th:replace="~{fragments/layout :: navbar}"></nav>
+    <div th:replace="~{fragments/layout :: alertas}"></div>
+
+    <main class="container my-4 main-content">
+        <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-2">
+            <div>
+                <h2 class="fw-bold text-dark mb-1">Pacientes Cadastrados</h2>
+                <p class="text-muted mb-0">Controle completo de prontuários, tutores e clínicas vinculadas.</p>
+            </div>
+            <a th:href="@{/admin/pets/novo}" class="btn btn-primary fw-semibold shadow-sm">
+                <i class="bi bi-plus-circle me-1"></i> Cadastrar Novo Pet
+            </a>
+        </div>
+
+        <div class="card card-custom">
+            <div class="card-body p-0">
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle mb-0">
+                        <thead class="table-light">
+                            <tr>
+                                <th>ID</th>
+                                <th>Nome do Pet</th>
+                                <th>Espécie / Raça</th>
+                                <th>Sexo</th>
+                                <th>Idade / Peso</th>
+                                <th>Tutor Responsável</th>
+                                <th>Clínica</th>
+                                <th class="text-end">Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr th:each="pet : ${pets}">
+                                <td class="fw-bold text-muted" th:text="'#' + ${pet.id}"></td>
+                                <td class="fw-semibold text-primary" th:text="${pet.nome}"></td>
+                                <td>
+                                    <span th:text="${pet.especie}"></span>
+                                    <small class="text-muted d-block" th:text="${pet.raca}"></small>
+                                </td>
+                                <td>
+                                    <span th:class="${pet.sexo.name() == 'M' ? 'badge bg-info text-dark' : 'badge bg-danger bg-opacity-75 text-white'}"
+                                          th:text="${pet.sexo.name() == 'M' ? 'Macho' : 'Fêmea'}"></span>
+                                </td>
+                                <td>
+                                    <span th:text="${pet.idade} + ' anos'"></span>
+                                    <small class="text-muted d-block" th:text="${pet.peso} + ' kg'"></small>
+                                </td>
+                                <td th:text="${pet.tutor != null ? pet.tutor.nome : 'Sem tutor'}"></td>
+                                <td th:text="${pet.clinica != null ? pet.clinica.nome : 'Sem clínica'}"></td>
+                                <td class="text-end">
+                                    <a th:href="@{/admin/pets/editar/{id}(id=${pet.id})}" class="btn btn-sm btn-outline-secondary me-1" title="Editar">
+                                        <i class="bi bi-pencil"></i>
+                                    </a>
+                                    <a th:href="@{/admin/pets/excluir/{id}(id=${pet.id})}" class="btn btn-sm btn-outline-danger" title="Excluir" onclick="return confirm('Tem certeza que deseja remover este pet?')">
+                                        <i class="bi bi-trash"></i>
+                                    </a>
+                                </td>
+                            </tr>
+                            <tr th:if="${#lists.isEmpty(pets)}">
+                                <td colspan="8" class="text-center py-4 text-muted">
+                                    Nenhum paciente cadastrado.
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer th:replace="~{fragments/layout :: footer}"></footer>
+    <script th:replace="~{fragments/layout :: scripts}"></script>
+</body>
+</html>
