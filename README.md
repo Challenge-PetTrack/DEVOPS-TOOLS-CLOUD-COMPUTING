@@ -1,4 +1,4 @@
-# 🐾 PetTrack (Clyvo Vet) — Infraestrutura em Nuvem & DevOps
+﻿# 🐾 PetTrack (Clyvo Vet) — Infraestrutura em Nuvem & DevOps
 ## ☁️ Sprint 3 — DevOps Tools & Cloud Computing (Challenge FIAP 2026)
 
 > Plataforma inteligente para monitoramento contínuo e gestão preventiva da saúde de animais de estimação, conectando tutores, clínicas veterinárias e coleiras inteligentes IoT.
@@ -14,8 +14,8 @@
 | **Richard Freitas** | 566127 | 2TDS |
 | **Thiago Rodrigues da Mota** | 563765 | 2TDS |
 
-* **Repositório GitHub:** [https://github.com/Challenge-PetTrack/DEVOPS-TOOLS-CLOUD-COMPUTING](https://github.com/Challenge-PetTrack/DEVOPS-TOOLS-CLOUD-COMPUTING)
-* **Vídeo Demonstrativo no YouTube:** [https://youtu.be/COLE_SEU_LINK_AQUI](https://youtu.be/COLE_SEU_LINK_AQUI)
+* **Repositório GitHub:** https://github.com/Challenge-PetTrack/DEVOPS-TOOLS-CLOUD-COMPUTING
+* **Vídeo Demonstrativo no YouTube:** https://youtu.be/jpeR_fnbQNE
 
 ---
 
