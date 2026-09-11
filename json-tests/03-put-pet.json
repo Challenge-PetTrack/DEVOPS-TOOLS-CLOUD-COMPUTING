@@ -1,11 +1,18 @@
 {
-  "nome": "Zeus - Atualizado",
+  "nome": "Zeus Atualizado",
   "especie": "Canino",
   "raca": "Pastor Alemão",
-  "dataNascimento": "2022-08-10",
-  "pesoKg": 37.8,
-  "sexo": "Macho",
-  "collarCode": "CLYVO-COLLAR-777",
-  "idTutor": 1,
-  "idClinica": 1
+  "sexo": "M",
+  "idade": 3.5,
+  "peso": 37.0,
+  "tutor": {
+    "id": 1,
+    "nome": "Carlos Eduardo Lima",
+    "email": "carlos.lima@email.com"
+  },
+  "clinica": {
+    "id": 1,
+    "nome": "Clyvo Vet Care - Jardins",
+    "cnpj": "12.345.678/0001-90"
+  }
 }

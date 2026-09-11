@@ -7,10 +7,12 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
+import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
@@ -45,29 +47,32 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
             .authenticationProvider(authenticationProvider())
-            .csrf(csrf -> csrf.ignoringRequestMatchers("/swagger/**", "/v3/api-docs/**", "/pet/**", "/clinica/**", "/collar/**", "/adesao/**", "/alerta/**", "/evento/**", "/medicamento/**", "/notificacao/**", "/protocolo/**", "/score/**", "/bcs/**", "/tutor/**"))
+            .csrf(AbstractHttpConfigurer::disable)
             .authorizeHttpRequests(auth -> auth
                 // Recursos estáticos públicos
                 .requestMatchers("/css/**", "/js/**", "/images/**", "/webjars/**", "/favicon.ico").permitAll()
                 
-                // Rotas de autenticação, erro e documentação Swagger
-                .requestMatchers("/login", "/registro", "/error", "/403", "/swagger/**", "/swagger-ui/**", "/swagger-ui.html", "/v3/api-docs/**").permitAll()
+                // Rotas de documentação Swagger / OpenAPI
+                .requestMatchers("/swagger/**", "/swagger-ui/**", "/swagger-ui.html", "/v3/api-docs/**", "/swagger-resources/**").permitAll()
                 
-                // Rotas exclusivas de Administrador / Veterinário
+                // Rotas de autenticação e erro
+                .requestMatchers("/login", "/registro", "/error", "/403").permitAll()
+                
+                // Endpoints REST Públicos para CRUD, Integração e Demonstração DevOps
+                .requestMatchers("/pet/**", "/tutor/**", "/clinica/**", "/collar/**", "/adesao/**", "/alerta/**", "/evento/**", "/medicamento/**", "/notificacao/**", "/protocolo/**", "/score/**", "/bcs/**").permitAll()
+                
+                // Rotas exclusivas de Administração web
                 .requestMatchers("/admin/**").hasAnyRole("ADMIN", "VET")
                 
-                // Rotas do portal do Tutor
+                // Rotas do portal do Tutor web
                 .requestMatchers("/portal-tutor/**").hasRole("TUTOR")
                 
-                // Dashboard geral redireciona baseado na role
+                // Dashboard geral
                 .requestMatchers("/", "/dashboard").authenticated()
-                
-                // APIs REST permitidas para testes e integrações
-                .requestMatchers(HttpMethod.GET, "/pet/**", "/clinica/**", "/alerta/**", "/score/**", "/collar/**").permitAll()
-                .requestMatchers("/pet/**", "/clinica/**", "/collar/**", "/adesao/**", "/alerta/**", "/evento/**", "/medicamento/**", "/notificacao/**", "/protocolo/**", "/score/**", "/bcs/**").authenticated()
 
-                .anyRequest().authenticated()
+                .anyRequest().permitAll()
             )
+            .httpBasic(Customizer.withDefaults())
             .formLogin(form -> form
                 .loginPage("/login")
                 .usernameParameter("email")

@@ -23,7 +23,7 @@
 
 O **PetTrack** é um ecossistema digital desenvolvido para a **Clyvo Vet** com o objetivo de transformar o cuidado veterinário de reativo para proativo. A solução integra uma API RESTful corporativa em **Java com Spring Boot** conectada a um banco de dados relacional em nuvem com persistência de dados.
 
-A plataforma gerencia o ciclo completo de saúde dos pets: cadastro de tutores, registro de animais com código de coleira IoT (`collar_code`), histórico de consultas clínicas, acompanhamento de adesão medicamentosa e alertas preventivos disparados por telemetria (temperatura e nível de atividade).
+A plataforma gerencia o ciclo completo de saúde dos pets: cadastro de tutores, registro de animais, histórico de eventos clínicos, acompanhamento de adesão medicamentosa e alertas preventivos disparados por telemetria (temperatura e nível de atividade).
 
 ---
 
@@ -92,7 +92,7 @@ DEVOPS-TOOLS-CLOUD-COMPUTING/
 │   └── 02-destroy-azure.sh            # Script para desalocação de recursos da nuvem
 ├── app/                               # Código-fonte da aplicação Java Spring Boot
 │   ├── Dockerfile                     # Multi-stage build com usuário NÃO-ROOT (appuser)
-│   ├── pom.xml                        # Dependências Maven (Spring Boot, JPA, MySQL/Oracle, Swagger)
+│   ├── pom.xml                        # Dependências Maven (Spring Boot, JPA, MySQL Connector, Swagger)
 │   └── src/                           # Controllers, Models, DTOs, Mappers, Repositories e Services
 └── db/                                # Container do Banco de Dados Relacional
     ├── Dockerfile                     # Imagem MySQL 8.0
@@ -143,7 +143,7 @@ O script realizará automaticamente:
 
 ## 🧪 7. Roteiro de Demonstração do CRUD e Evidências SQL
 
-Abaixo estão os comandos para testar o CRUD completo em duas tabelas relacionadas (`tb_tutor` e `tb_pet`) e comprovar a persistência diretamente no banco via `az container exec`:
+Abaixo estão os comandos para testar o CRUD completo em duas tabelas relacionadas (`tb_tutor` e `tb_pet`) e comprovar a persistência diretamente no banco:
 
 ### URLs Públicas:
 * **API Pets:** `http://pettrack-app-563719.eastus.azurecontainer.io:8080/pet/todos`
@@ -181,36 +181,33 @@ curl -X POST http://pettrack-app-563719.eastus.azurecontainer.io:8080/pet/novo \
 
 **Evidência no Banco de Dados (SELECT com JOIN):**
 ```bash
-az container exec --resource-group rg-pettrack-563719 --name pettrack-db \
-  --exec-command "/bin/sh -c 'mysql -u root -pRoot@2026Secure pettrack -e \"SELECT p.id, p.nome AS Pet, p.raca, t.nome AS Tutor, p.collar_code FROM tb_pet p INNER JOIN tb_tutor t ON p.tutor_id = t.id;\"'"
+docker run --rm mysql:8.0 mysql -h pettrack-db-563719.eastus.azurecontainer.io -u pettrack_user -pPetTrack@2026Secure -D pettrack -e "SELECT p.id_pet, p.nm_pet AS Pet, p.ds_especie, p.ds_raca, t.nm_tutor AS Tutor, p.nr_peso_kg FROM tb_pet p INNER JOIN tb_tutor t ON p.id_tutor = t.id_tutor;"
 ```
 
 ---
 
 ### 3️⃣ UPDATE (Atualizar Dados do Pet Criado)
 ```bash
-curl -X PUT http://pettrack-app-563719.eastus.azurecontainer.io:8080/pet/atualizar/4 \
+curl -X PUT http://pettrack-app-563719.eastus.azurecontainer.io:8080/pet/atualizar/100 \
   -H "Content-Type: application/json" \
   -d @json-tests/03-put-pet.json
 ```
 
 **Evidência no Banco de Dados:**
 ```bash
-az container exec --resource-group rg-pettrack-563719 --name pettrack-db \
-  --exec-command "/bin/sh -c 'mysql -u root -pRoot@2026Secure pettrack -e \"SELECT id, nome, peso_kg, collar_code FROM tb_pet WHERE id = 4;\"'"
+docker run --rm mysql:8.0 mysql -h pettrack-db-563719.eastus.azurecontainer.io -u pettrack_user -pPetTrack@2026Secure -D pettrack -e "SELECT id_pet, nm_pet, ds_raca, nr_peso_kg FROM tb_pet WHERE id_pet = 100;"
 ```
 
 ---
 
 ### 4️⃣ DELETE (Remover o Pet)
 ```bash
-curl -X DELETE http://pettrack-app-563719.eastus.azurecontainer.io:8080/pet/remover/4
+curl -X DELETE http://pettrack-app-563719.eastus.azurecontainer.io:8080/pet/remover/100
 ```
 
 **Evidência no Banco de Dados (Comprovação da Exclusão):**
 ```bash
-az container exec --resource-group rg-pettrack-563719 --name pettrack-db \
-  --exec-command "/bin/sh -c 'mysql -u root -pRoot@2026Secure pettrack -e \"SELECT * FROM tb_pet WHERE id = 4;\"'"
+docker run --rm mysql:8.0 mysql -h pettrack-db-563719.eastus.azurecontainer.io -u pettrack_user -pPetTrack@2026Secure -D pettrack -e "SELECT id_pet, nm_pet FROM tb_pet WHERE id_pet = 100;"
 ```
 
 ---

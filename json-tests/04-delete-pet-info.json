@@ -1,5 +1,6 @@
 {
-  "operacao": "DELETE",
-  "recurso": "/pet/remover/{id}",
-  "descricao": "Exclusão do Pet cadastrado nos testes e validação da deleção no banco via SELECT"
+  "descricao": "Instrução para exclusão de Pet via DELETE",
+  "endpoint": "DELETE /pet/remover/{id}",
+  "exemploId": 100,
+  "curlExemplo": "curl -i -X DELETE http://pettrack-app-563719.eastus.azurecontainer.io:8080/pet/remover/100"
 }

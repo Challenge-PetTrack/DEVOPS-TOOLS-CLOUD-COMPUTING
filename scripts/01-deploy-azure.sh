@@ -91,11 +91,14 @@ az storage share create \
 # 7. DEPLOY DO ACI - BANCO DE DADOS (MYSQL COM PERSISTÊNCIA)
 echo ""
 echo "--> [6/6] Criando Azure Container Instance do Banco de Dados: $DB_ACI_NAME..."
+az container delete --resource-group "$RESOURCE_GROUP" --name "$DB_ACI_NAME" --yes || true
+
 az container create \
   --resource-group "$RESOURCE_GROUP" \
   --name "$DB_ACI_NAME" \
   --image "$ACR_LOGIN_SERVER/pettrack-db:latest" \
   --os-type Linux \
+  --restart-policy Always \
   --registry-login-server "$ACR_LOGIN_SERVER" \
   --registry-username "$ACR_USERNAME" \
   --registry-password "$ACR_PASSWORD" \
@@ -113,8 +116,8 @@ az container create \
   --azure-file-volume-share-name "$FILE_SHARE_NAME" \
   --azure-file-volume-mount-path /var/lib/mysql
 
-echo "Aguardando 20 segundos para estabilização do banco de dados..."
-sleep 20
+echo "Aguardando 25 segundos para estabilização do banco de dados..."
+sleep 25
 
 DB_HOST=$(az container show --resource-group "$RESOURCE_GROUP" --name "$DB_ACI_NAME" --query ipAddress.fqdn -o tsv)
 echo "Banco disponível em: $DB_HOST:3306"
@@ -122,22 +125,28 @@ echo "Banco disponível em: $DB_HOST:3306"
 # 8. DEPLOY DO ACI - APLICAÇÃO (SPRING BOOT SEM PRIVILÉGIOS ROOT)
 echo ""
 echo "--> Criando Azure Container Instance da Aplicação: $APP_ACI_NAME..."
+az container delete --resource-group "$RESOURCE_GROUP" --name "$APP_ACI_NAME" --yes || true
+
 az container create \
   --resource-group "$RESOURCE_GROUP" \
   --name "$APP_ACI_NAME" \
   --image "$ACR_LOGIN_SERVER/pettrack-app:latest" \
   --os-type Linux \
+  --restart-policy Always \
   --registry-login-server "$ACR_LOGIN_SERVER" \
   --registry-username "$ACR_USERNAME" \
   --registry-password "$ACR_PASSWORD" \
   --dns-name-label "$DNS_APP" \
   --ports 8080 \
   --cpu 1 \
-  --memory 1.5 \
+  --memory 2.0 \
   --environment-variables \
       SPRING_DATASOURCE_URL="jdbc:mysql://${DB_HOST}:3306/${DB_NAME}?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC" \
       SPRING_DATASOURCE_USERNAME="$DB_USER" \
       SPRING_DATASOURCE_PASSWORD="$DB_PASS"
+
+echo "Aguardando 15 segundos para a inicialização da aplicação..."
+sleep 15
 
 APP_URL=$(az container show --resource-group "$RESOURCE_GROUP" --name "$APP_ACI_NAME" --query ipAddress.fqdn -o tsv)
 
