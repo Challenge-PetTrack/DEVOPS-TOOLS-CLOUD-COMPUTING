@@ -12,7 +12,7 @@
 | **Gabriel Sbrana Campos** | 565849 | 2TDS |
 | **Moisés Waidemann Molinillo Júnior** | 563719 | 2TDS |
 | **Richard Freitas** | 566127 | 2TDS |
-| **Thiago Rodrigues da Mota** | 563765 | 2TDS |
+| **Thiago Rodrigues da Mota** | 563650 | 2TDS |
 
 * **Repositório GitHub:** https://github.com/Challenge-PetTrack/DEVOPS-TOOLS-CLOUD-COMPUTING
 * **Vídeo Demonstrativo no YouTube:** https://youtu.be/jpeR_fnbQNE
